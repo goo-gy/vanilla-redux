@@ -1,30 +1,13 @@
-import { createStore } from 'redux';
+const inputTodo = document.getElementById('inputTodo');
+const buttonAdd = document.getElementById('buttonAdd');
+const listTodo = document.getElementById('listTodo');
 
-const add = document.getElementById('add');
-const minus = document.getElementById('minus');
-const number = document.getElementById('number');
-
-// store & reducer
-const countReducer = (count = 0, action) => {
-    if (action.type === 'ADD') return count + 1;
-    else if (action.type === 'MINUS') return count - 1;
-    return count;
+const createTodo = (text) => {
+    const li = document.createElement('li');
+    li.innerText = text;
+    listTodo.appendChild(li);
 };
-const countStore = createStore(countReducer);
 
-// initial
-number.innerText = countStore.getState();
-
-// dispatch
-add.addEventListener('click', () => {
-    countStore.dispatch({ type: 'ADD' });
+buttonAdd.addEventListener('click', () => {
+    createTodo(inputTodo.value);
 });
-minus.addEventListener('click', () => {
-    countStore.dispatch({ type: 'MINUS' });
-});
-
-// subscribe
-const onChange = () => {
-    number.innerText = countStore.getState();
-};
-countStore.subscribe(onChange);
