@@ -14,7 +14,7 @@ const reducerTodo = (state = [], action) => {
             return [...state, { text: action.text, date: Date.now() }];
         case REMOVE:
             const updateState = state.filter(
-                (item) => item.date !== parseInt(action.date)
+                (item) => item.date !== action.date
             );
             return updateState;
         default:
@@ -33,7 +33,7 @@ const AddTodo = (e) => {
 const removeTodo = (e) => {
     storeTodo.dispatch({
         type: REMOVE,
-        date: e.target.parentNode.id,
+        date: parseInt(e.target.parentNode.id),
     });
 };
 
