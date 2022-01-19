@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
+import { connect } from 'react-redux';
+import { actionCreators } from '../store';
 
-const Home = () => {
-    const [toDoList, setTodoList] = useState([]);
+const Home = ({ state, addToDo, deleteTodo }) => {
     const [text, setText] = useState('');
 
     const handleChangeInput = (e) => {
@@ -9,14 +10,13 @@ const Home = () => {
     };
 
     const handleClickAdd = (e) => {
+        addToDo(text);
         e.preventDefault();
-        setTodoList([...toDoList, { text: text, time: Date.now() }]);
         setText('');
     };
 
-    const handleClickDel = (time) => {
-        const updateTodoList = toDoList.filter((todo) => todo.time !== time);
-        setTodoList(updateTodoList);
+    const handleClickDel = (id) => {
+        deleteTodo(id);
     };
     return (
         <>
@@ -24,12 +24,12 @@ const Home = () => {
             <input type="text" value={text} onChange={handleChangeInput} />
             <button onClick={handleClickAdd}>Add</button>
             <ul>
-                {toDoList.map((toDo) => (
-                    <li id={toDo.time} key={toDo.time}>
+                {state.map((toDo) => (
+                    <li id={toDo.id} key={toDo.id}>
                         {toDo.text}
                         <button
                             onClick={() => {
-                                handleClickDel(toDo.time);
+                                handleClickDel(toDo.id);
                             }}
                         >
                             Del
@@ -41,4 +41,19 @@ const Home = () => {
     );
 };
 
-export default Home;
+const mapStateToProps = (state, ownProps) => {
+    console.log('mapState', ownProps);
+    return { state };
+};
+const mapDispatchProps = (dispatch, ownProps) => {
+    console.log('mapState', ownProps);
+    return {
+        addToDo: (text) => {
+            dispatch(actionCreators.addToDo(text));
+        },
+        deleteTodo: (id) => {
+            dispatch(actionCreators.deleteTodo(id));
+        },
+    };
+};
+export default connect(mapStateToProps, mapDispatchProps)(Home);
