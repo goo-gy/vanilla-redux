@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
-import { actionCreators } from '../store';
 
-const Home = ({ state, addToDo, deleteTodo }) => {
+//local
+import { actionCreators } from '../store';
+import ToDo from './ToDo';
+
+const Home = ({ state, addToDo }) => {
     const [text, setText] = useState('');
 
     const handleChangeInput = (e) => {
@@ -15,9 +18,6 @@ const Home = ({ state, addToDo, deleteTodo }) => {
         setText('');
     };
 
-    const handleClickDel = (id) => {
-        deleteTodo(id);
-    };
     return (
         <>
             <h1>To Do</h1>
@@ -25,16 +25,7 @@ const Home = ({ state, addToDo, deleteTodo }) => {
             <button onClick={handleClickAdd}>Add</button>
             <ul>
                 {state.map((toDo) => (
-                    <li id={toDo.id} key={toDo.id}>
-                        {toDo.text}
-                        <button
-                            onClick={() => {
-                                handleClickDel(toDo.id);
-                            }}
-                        >
-                            Del
-                        </button>
-                    </li>
+                    <ToDo key={toDo.id} toDo={toDo} />
                 ))}
             </ul>
         </>
@@ -42,17 +33,12 @@ const Home = ({ state, addToDo, deleteTodo }) => {
 };
 
 const mapStateToProps = (state, ownProps) => {
-    console.log('mapState', ownProps);
     return { state };
 };
 const mapDispatchProps = (dispatch, ownProps) => {
-    console.log('mapState', ownProps);
     return {
         addToDo: (text) => {
             dispatch(actionCreators.addToDo(text));
-        },
-        deleteTodo: (id) => {
-            dispatch(actionCreators.deleteTodo(id));
         },
     };
 };
